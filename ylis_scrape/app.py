@@ -5,6 +5,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+matched_posts = {}
 
 @app.route('/get_all_posts', methods=['GET'])
 def scrape_posts():
@@ -31,7 +32,7 @@ def add_to_db():
     
     else:
         scraper.add_to_db(matched_posts, keyword)
-        return jsonify({"success": "posts saved"}), 400
+        return jsonify({"success": "posts saved"}), 200
 
     
 

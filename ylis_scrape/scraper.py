@@ -101,7 +101,7 @@ def get_all_posts(url, keyword):
 def add_to_db(matched, key,):
     for i, j in matched.items():
         cursor.execute(
-            "INSERT INTO posts_with_keyword (user_id, message, keyword) VALUES (?, ?, ?)",
+            "INSERT INTO post_and_keyword (id, message, keyword) VALUES (?, ?, ?)",
             (i, j, key)
         )
     conn.commit()
