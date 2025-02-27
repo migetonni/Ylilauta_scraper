@@ -1,9 +1,16 @@
+
 import Button from '@mui/material/Button';
 import React, { useState } from "react";
+
 import Card from 'react-bootstrap/Card';
 import axios from "axios";
 import { TextField } from '@mui/material'
 import './App.css';
+
+import { BarChart } from '@mui/x-charts/BarChart';
+
+
+
 
 function App() {
   const [ids, setIds] = useState([])
@@ -11,6 +18,11 @@ function App() {
   const [messages, setMessages] = useState([])
   const [keyword, setKeyword] = useState("")
   const [index, setIndex] = useState(0)
+  const [keywordsList, setKeywordsList] = useState([]);
+  const [keywAmounts, setAmounts] = useState([]);
+  const [showChart, setShowChart] = useState(false);
+  
+
   const handleClick = async () => {
     console.log("click")
     try {
@@ -53,6 +65,22 @@ function App() {
       console.log("Error")
     }
   }
+    const keywClick = async () => {
+      
+
+      const response = await axios.get("http://127.0.0.1:5000/get_keywords");
+      const data = response.data;
+      console.log(Object.keys(data))
+      console.log(Object.values(data))
+      setKeywordsList(Object.keys(data));
+      setAmounts(Object.values(data));
+      setShowChart(true)
+      console.log(keywordsList)
+      console.log(keywAmounts)
+
+
+    
+  };
 
 
 
@@ -67,7 +95,10 @@ function App() {
 
 
 
-  return (
+  return !showChart ? (
+    
+  
+    
     <div className="main">
       <div className="header1">
         <header>
@@ -104,12 +135,44 @@ function App() {
         <Button variant='contained' type="button" onClick={cardLast}>
           Click for last post
         </Button>
+        <Button variant='contained' type="button" onClick={keywClick}>
+          get insights into keyword frequency
+        </Button>
       </div>
       <div className="db_btn">
         <Button variant='contained' type="button" onClick={saveToDb}>
           save posts
         </Button>
       </div>
+      
+      
+        
+      
+    </div>
+  ): ( 
+  <div className='barChart'>
+        
+    <BarChart 
+      xAxis={[
+        {
+      id: 'barCategories',
+      data: keywordsList,
+      scaleType: 'band',
+        },
+      ]}
+      series={[
+        {
+          data: keywAmounts,
+        },
+      ]}
+      width={1000}
+      height={600} />
+      <Button variant='contained' type="button" onClick={() => setShowChart(false)}>
+      Go back
+      </Button>
+
+
+
     </div>
       
       

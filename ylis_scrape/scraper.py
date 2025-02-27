@@ -101,10 +101,24 @@ def get_all_posts(url, keyword):
 def add_to_db(matched, key,):
     for i, j in matched.items():
         cursor.execute(
-            "INSERT INTO post_and_keyword (id, message, keyword) VALUES (?, ?, ?)",
+            "INSERT INTO posts_with_keyword (user_id, message, keyword) VALUES (?, ?, ?)",
             (i, j, key)
         )
     conn.commit()
+
+def extract_keyword():
+    keyword_dict = {}
+    cursor.execute(
+        "SELECT keyword, COUNT(keyword) AS amount FROM posts_with_keyword GROUP BY keyword"
+    )
+    result = cursor.fetchall()
+    
+    conn.commit()
+
+    for i in result:
+        keyword, amount = i
+        keyword_dict[keyword] = amount
+    return keyword_dict
 
 """def sentiments_analysis(posts_to_analyze):
     openai.api_key = os.getenv('GPT_KEY')

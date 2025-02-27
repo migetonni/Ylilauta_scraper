@@ -2,6 +2,7 @@
 import scraper
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -33,6 +34,12 @@ def add_to_db():
     else:
         scraper.add_to_db(matched_posts, keyword)
         return jsonify({"success": "posts saved"}), 200
+    
+@app.route('/get_keywords', methods=['GET'])
+def get_keyw():
+    
+    keywords = scraper.extract_keyword()
+    return json.dumps(keywords, ensure_ascii=False)
 
     
 
