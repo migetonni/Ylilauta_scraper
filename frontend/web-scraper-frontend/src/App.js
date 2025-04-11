@@ -32,7 +32,7 @@ function App() {
         return;
       }
       
-      const response = await axios.get("http://127.0.0.1:5000/get_all_posts", {
+      const response = await axios.get("migetintti.pythonanywhere.com/get_all_posts", {
         params: {keyword: keyword},
       })
       const data = response.data
@@ -47,7 +47,7 @@ function App() {
       alert("Scraping not succesfull")
     }
     try{
-    const sentimentRes = await axios.get("http://127.0.0.1:5000/get_sentiment");
+    const sentimentRes = await axios.get("migetintti.pythonanywhere.com/get_sentiment");
     setSentimentResult(sentimentRes.data);
     }
 
@@ -70,7 +70,7 @@ function App() {
 
   const saveToDb = async () => {
     try{
-      const response = await axios.post("http://127.0.0.1:5000/add_to_db")
+      const response = await axios.post("migetintti.pythonanywhere.com/add_to_db")
     }
     catch {
       console.log("Error")
@@ -79,7 +79,7 @@ function App() {
     const keywClick = async () => {
       
 
-      const response = await axios.get("http://127.0.0.1:5000/get_keywords");
+      const response = await axios.get("migetintti.pythonanywhere.com/get_keywords");
       const data = response.data;
       console.log(Object.keys(data))
       console.log(Object.values(data))
