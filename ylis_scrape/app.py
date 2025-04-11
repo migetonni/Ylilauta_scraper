@@ -5,7 +5,7 @@ from flask_cors import CORS
 import json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://yliscrape.vercel.app"])
 matched_posts = {}
 
 @app.route('/get_all_posts', methods=['GET'])
@@ -61,5 +61,5 @@ def get_sent():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host= "0.0.0.0", port=5000)
 
