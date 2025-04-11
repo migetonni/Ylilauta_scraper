@@ -7,7 +7,8 @@ import mariadb
 import sys
 import os
 from dotenv import load_dotenv
-#import openai 
+from transformers import pipeline
+
 
 load_dotenv()
 
@@ -120,21 +121,19 @@ def extract_keyword():
         keyword_dict[keyword] = amount
     return keyword_dict
 
-"""def sentiments_analysis(posts_to_analyze):
-    openai.api_key = os.getenv('GPT_KEY')
-    
-    results = []
-    for i in posts_to_analyze.items():
+def sentiments_analysis(posts_to_analyze):
+    sentiment_pipeline = pipeline("sentiment-analysis")
 
-        
-        completion = openai.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a sentiment analyzer who analyzes message forum posts. Only use the words positive, negative, neutral."},
-            
-        ])
-        results.append(completion.choices[0].message)
-"""
+    data_raw = list(posts_to_analyze.values())
+    data_final = []
+
+    for i in data_raw:
+        if (isinstance(i, str) and i != ""):
+            data_final.append(i)
+    
+    result = sentiment_pipeline(data_final)
+    print(result)
+    return result    
 
 
     
@@ -143,11 +142,3 @@ def extract_keyword():
         
 
 
-#if __name__ == "__main__":
- #   all_posts_dict = get_all_posts()
-  #  matched_posts = get_matching_posts(all_posts_dict, KEYWORD)
-   # print(matched_posts)
-    #if len(matched_posts) != 0:
-     #   add_to_db(matched_posts, KEYWORD)
-    #else:
-     #   print("No matching posts")

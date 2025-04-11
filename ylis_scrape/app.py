@@ -41,6 +41,15 @@ def get_keyw():
     keywords = scraper.extract_keyword()
     return json.dumps(keywords, ensure_ascii=False)
 
+
+@app.route('/get_sentiment', methods=['GET'])
+def get_sent():
+    global matched_posts
+    if not matched_posts:
+        return jsonify({"error": "no matched posts"}), 400
+    sentiment = scraper.sentiments_analysis(matched_posts)
+    return jsonify(sentiment)
+
     
 
 

@@ -21,6 +21,7 @@ function App() {
   const [keywordsList, setKeywordsList] = useState([]);
   const [keywAmounts, setAmounts] = useState([]);
   const [showChart, setShowChart] = useState(false);
+  const [sentimentResult, setSentimentResult] = useState([]);
   
 
   const handleClick = async () => {
@@ -44,7 +45,17 @@ function App() {
     }
     catch(error) {
       alert("Scraping not succesfull")
-    }}
+    }
+    try{
+    const sentimentRes = await axios.get("http://127.0.0.1:5000/get_sentiment");
+    setSentimentResult(sentimentRes.data);
+    }
+
+    catch (error) {
+    console.error("Error:", error);
+    alert("Scraping or sentiment analysis failed");
+  }
+  }
 
   const cardClick = () => {
     if (index < messages.length - 1) {
@@ -127,6 +138,12 @@ function App() {
           <Card.Body>
             <Card.Title>{ids.length > 0 ? ids[index] : "No post Id to display"}</Card.Title>
             <Card.Text>{messages.length > 0 ? messages[index] : "No posts to display"}</Card.Text>
+            {sentimentResult && sentimentResult.length > index && sentimentResult[index] && (
+            <Card.Text style={{ fontStyle: "italic", color: "#555" }}>
+            Sentiment: {sentimentResult[index].label} (
+            {sentimentResult[index].score.toFixed(2)})
+            </Card.Text>
+            )}
           </Card.Body>
         </Card>
         <Button variant='contained' type="button" onClick={cardClick}>
